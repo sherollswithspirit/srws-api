@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "word_clouds",
+  "info": {
+    "singularName": "word-cloud",
+    "pluralName": "word-clouds",
+    "displayName": "Word Cloud"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Word": {
+      "type": "string"
+    }
+  }
+}
