@@ -400,7 +400,7 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
 }
 
 export interface ApiEnergyAndFrequencyEnergyAndFrequency
-  extends Struct.SingleTypeSchema {
+  extends Struct.CollectionTypeSchema {
   collectionName: 'energy_and_frequencies';
   info: {
     displayName: 'Energy and Frequency';
