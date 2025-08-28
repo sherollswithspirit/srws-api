@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "energy_and_frequencies",
+  "info": {
+    "singularName": "energy-and-frequency",
+    "pluralName": "energy-and-frequencies",
+    "displayName": "Energy and Frequency"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "blocks"
+    }
+  }
+}
