@@ -1,5 +1,5 @@
 {
-  "kind": "singleType",
+  "kind": "collectionType",
   "collectionName": "energy_and_frequencies",
   "info": {
     "singularName": "energy-and-frequency",
