@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "energy_and_frequencies",
+  "collectionName": "tools",
   "info": {
-    "singularName": "energy-and-frequency",
-    "pluralName": "energy-and-frequencies",
-    "displayName": "Energy and Frequency"
+    "singularName": "tool",
+    "pluralName": "tools",
+    "displayName": "Tools and Practices"
   },
   "options": {
     "draftAndPublish": true

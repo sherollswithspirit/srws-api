@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "energy_and_frequencies",
+  "collectionName": "clairs",
   "info": {
-    "singularName": "energy-and-frequency",
-    "pluralName": "energy-and-frequencies",
-    "displayName": "Energy and Frequency"
+    "singularName": "clair",
+    "pluralName": "clairs",
+    "displayName": "Psychic Clairs"
   },
   "options": {
     "draftAndPublish": true
