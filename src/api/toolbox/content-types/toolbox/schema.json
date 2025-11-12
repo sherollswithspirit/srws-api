@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "toolboxes",
+  "info": {
+    "singularName": "toolbox",
+    "pluralName": "toolboxes",
+    "displayName": "Toolbox"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Subtitle": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "blocks"
+    }
+  }
+}

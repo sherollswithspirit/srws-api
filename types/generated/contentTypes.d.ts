@@ -548,6 +548,36 @@ export interface ApiToolTool extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiToolboxToolbox extends Struct.CollectionTypeSchema {
+  collectionName: 'toolboxes';
+  info: {
+    displayName: 'Toolbox';
+    pluralName: 'toolboxes';
+    singularName: 'toolbox';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::toolbox.toolbox'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Subtitle: Schema.Attribute.String;
+    Title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiWordCloudWordCloud extends Struct.CollectionTypeSchema {
   collectionName: 'word_clouds';
   info: {
@@ -1091,6 +1121,7 @@ declare module '@strapi/strapi' {
       'api::energy-and-frequency.energy-and-frequency': ApiEnergyAndFrequencyEnergyAndFrequency;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tool.tool': ApiToolTool;
+      'api::toolbox.toolbox': ApiToolboxToolbox;
       'api::word-cloud.word-cloud': ApiWordCloudWordCloud;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
