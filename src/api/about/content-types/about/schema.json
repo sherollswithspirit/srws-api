@@ -16,6 +16,14 @@
     },
     "Description": {
       "type": "blocks"
+    },
+    "Certifications": {
+      "type": "text"
+    },
+    "Quote": {
+      "type": "component",
+      "component": "quote.quotes",
+      "repeatable": true
     }
   }
 }
