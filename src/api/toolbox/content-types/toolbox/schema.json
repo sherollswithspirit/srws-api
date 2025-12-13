@@ -19,6 +19,9 @@
     },
     "Description": {
       "type": "blocks"
+    },
+    "Order": {
+      "type": "integer"
     }
   }
 }
