@@ -448,6 +448,7 @@ export interface ApiClairClair extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::clair.clair'> &
       Schema.Attribute.Private;
+    Order: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     Subtitle: Schema.Attribute.String;
     Title: Schema.Attribute.String;
