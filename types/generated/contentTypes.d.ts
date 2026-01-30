@@ -515,6 +515,39 @@ export interface ApiClairClair extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactSubmissionContactSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissions';
+  info: {
+    description: 'Contact form submissions from the website';
+    displayName: 'Contact Submission';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEnergyAndFrequencyEnergyAndFrequency
   extends Struct.CollectionTypeSchema {
   collectionName: 'energy_and_frequencies';
@@ -1180,6 +1213,7 @@ declare module '@strapi/strapi' {
       'api::about.about': ApiAboutAbout;
       'api::booking.booking': ApiBookingBooking;
       'api::clair.clair': ApiClairClair;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::energy-and-frequency.energy-and-frequency': ApiEnergyAndFrequencyEnergyAndFrequency;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tool.tool': ApiToolTool;
