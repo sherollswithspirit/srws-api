@@ -24,7 +24,8 @@ module.exports = createCoreController(
       const response = await super.create(ctx);
 
       // Get the submitted data
-      const { name, email, phone, message } = ctx.request.body.data;
+      const { firstName, lastName, email, phone, preferredReading, referral, message } = ctx.request.body.data;
+      const fullName = `${firstName} ${lastName}`;
 
       // Send email notification
       try {
@@ -34,21 +35,25 @@ module.exports = createCoreController(
           from: process.env.SMTP_FROM || process.env.SMTP_USER,
           to: process.env.CONTACT_EMAIL,
           replyTo: email,
-          subject: `New Contact Form Submission from ${name}`,
+          subject: `New Contact Form Submission from ${fullName}`,
           html: `
             <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Name:</strong> ${fullName}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+            <p><strong>Preferred Reading:</strong> ${preferredReading}</p>
+            <p><strong>Referral:</strong> ${referral || "Not provided"}</p>
             <p><strong>Message:</strong></p>
             <p>${message}</p>
           `,
           text: `
 New Contact Form Submission
 
-Name: ${name}
+Name: ${fullName}
 Email: ${email}
 Phone: ${phone || "Not provided"}
+Preferred Reading: ${preferredReading}
+Referral: ${referral || "Not provided"}
 Message: ${message}
           `.trim(),
         });

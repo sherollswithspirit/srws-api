@@ -12,7 +12,11 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
       "type": "string",
       "required": true
     },
@@ -21,6 +25,14 @@
       "required": true
     },
     "phone": {
+      "type": "string"
+    },
+    "preferredReading": {
+      "type": "enumeration",
+      "enum": ["Phone", "Zoom"],
+      "required": true
+    },
+    "referral": {
       "type": "string"
     },
     "message": {
