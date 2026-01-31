@@ -12,7 +12,7 @@ const getProviderConfig = () => {
             return {
                 host: process.env.RESEND_HOST || "smtp.resend.com",
                 port: 465,
-                secure: true,
+                secure: false,
                 auth: {
                     user: "resend",
                     pass: process.env.RESEND_API_KEY,
