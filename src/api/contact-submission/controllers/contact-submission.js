@@ -82,7 +82,9 @@ module.exports = createCoreController(
 
             // Send email notification (fire-and-forget, don't block response)
             const transporter = createTransporter();
-            const fromEmail = process.env.EMAIL_FROM || process.env.SMTP_USER;
+            const provider = (process.env.EMAIL_PROVIDER || "gmail").toLowerCase();
+
+            const fromEmail = provider === "resend" ? process.env.RESEND_EMAIL_FROM : process.env.EMAIL_FROM || process.env.SMTP_USER;
 
             transporter.sendMail({
                 from: fromEmail,
