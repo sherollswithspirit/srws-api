@@ -27,26 +27,24 @@ module.exports = createCoreController(
       const { firstName, lastName, email, phone, preferredReading, referral, message } = ctx.request.body.data;
       const fullName = `${firstName} ${lastName}`;
 
-      // Send email notification
-      try {
-        const transporter = createTransporter();
-
-        await transporter.sendMail({
-          from: process.env.SMTP_FROM || process.env.SMTP_USER,
-          to: process.env.CONTACT_EMAIL,
-          replyTo: email,
-          subject: `New Contact Form Submission from ${fullName}`,
-          html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${fullName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-            <p><strong>Preferred Reading:</strong> ${preferredReading}</p>
-            <p><strong>Referral:</strong> ${referral || "Not provided"}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          `,
-          text: `
+      // Send email notification (fire-and-forget, don't block response)
+      const transporter = createTransporter();
+      transporter.sendMail({
+        from: process.env.SMTP_FROM || process.env.SMTP_USER,
+        to: process.env.CONTACT_EMAIL,
+        replyTo: email,
+        subject: `New Contact Form Submission from ${fullName}`,
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${fullName}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+          <p><strong>Preferred Reading:</strong> ${preferredReading}</p>
+          <p><strong>Referral:</strong> ${referral || "Not provided"}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        `,
+        text: `
 New Contact Form Submission
 
 Name: ${fullName}
@@ -55,14 +53,12 @@ Phone: ${phone || "Not provided"}
 Preferred Reading: ${preferredReading}
 Referral: ${referral || "Not provided"}
 Message: ${message}
-          `.trim(),
-        });
-
+        `.trim(),
+      }).then(() => {
         strapi.log.info(`Contact form email sent for submission from ${email}`);
-      } catch (err) {
+      }).catch((err) => {
         strapi.log.error("Failed to send contact form email:", err);
-        // Don't fail the request if email fails - the submission is still saved
-      }
+      });
 
       return response;
     },
