@@ -20,6 +20,15 @@ module.exports = createCoreController(
   "api::contact-submission.contact-submission",
   ({ strapi }) => ({
     async create(ctx) {
+      // Honeypot check - if 'website' field is filled, silently reject
+      // Bots often fill hidden fields; legitimate users won't see them
+      const { website } = ctx.request.body.data || {};
+      if (website) {
+        strapi.log.warn("Honeypot triggered - spam submission blocked");
+        // Return fake success to not alert the bot
+        return { data: { id: 0 } };
+      }
+
       // Create the contact submission entry
       const response = await super.create(ctx);
 
