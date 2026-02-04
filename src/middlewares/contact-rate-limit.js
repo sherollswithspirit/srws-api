@@ -25,6 +25,11 @@ setInterval(() => {
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
+    // Skip rate limiting in development mode
+    if (process.env.NODE_ENV === 'development') {
+      return next();
+    }
+
     // Only apply to POST requests on contact-submissions
     if (
       ctx.method !== "POST" ||

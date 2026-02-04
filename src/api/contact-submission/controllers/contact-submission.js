@@ -99,8 +99,10 @@ module.exports = createCoreController(
                 return { data: { id: 0 } };
             }
 
-            // Turnstile verification
-            if (process.env.TURNSTILE_SECRET_KEY) {
+            // Turnstile verification (skip in development mode)
+            if (process.env.NODE_ENV === 'development') {
+                strapi.log.info("Turnstile verification skipped in development mode");
+            } else if (process.env.TURNSTILE_SECRET_KEY) {
                 if (!turnstileToken) {
                     ctx.status = 400;
                     return { error: { message: "Turnstile verification required" } };
