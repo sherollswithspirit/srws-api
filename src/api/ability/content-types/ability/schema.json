@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "abilities",
+  "info": {
+    "singularName": "ability",
+    "pluralName": "abilities",
+    "displayName": "My Abilities"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Description": {
+      "type": "blocks"
+    }
+  }
+}
