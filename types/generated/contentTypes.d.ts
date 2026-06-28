@@ -611,6 +611,47 @@ export interface ApiEnergyAndFrequencyEnergyAndFrequency
   };
 }
 
+export interface ApiTestimonialRequestTestimonialRequest
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'testimonial_requests';
+  info: {
+    description: 'Single-use tokenized invitations for customers to submit a testimonial';
+    displayName: 'Testimonial Request';
+    pluralName: 'testimonial-requests';
+    singularName: 'testimonial-request';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    expiresAt: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonial-request.testimonial-request'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    recipientEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    recipientName: Schema.Attribute.String & Schema.Attribute.Required;
+    sentAt: Schema.Attribute.DateTime;
+    status: Schema.Attribute.Enumeration<['pending', 'completed', 'expired']> &
+      Schema.Attribute.DefaultTo<'pending'>;
+    testimonial: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::testimonial.testimonial'
+    >;
+    token: Schema.Attribute.String & Schema.Attribute.Unique;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    usedAt: Schema.Attribute.DateTime;
+  };
+}
+
 export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
   collectionName: 'testimonials';
   info: {
@@ -1248,6 +1289,7 @@ declare module '@strapi/strapi' {
       'api::clair.clair': ApiClairClair;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::energy-and-frequency.energy-and-frequency': ApiEnergyAndFrequencyEnergyAndFrequency;
+      'api::testimonial-request.testimonial-request': ApiTestimonialRequestTestimonialRequest;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tool.tool': ApiToolTool;
       'api::toolbox.toolbox': ApiToolboxToolbox;
