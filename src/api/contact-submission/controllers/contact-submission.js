@@ -1,90 +1,7 @@
 "use strict";
 
 const { createCoreController } = require("@strapi/strapi").factories;
-const nodemailer = require("nodemailer");
-
-// Email provider configurations (for SMTP-based providers)
-const getProviderConfig = () => {
-    const provider = (process.env.EMAIL_PROVIDER || "gmail").toLowerCase();
-
-    switch (provider) {
-        case "sendgrid":
-            return {
-                host: process.env.SENDGRID_HOST || "smtp.sendgrid.net",
-                port: 587,
-                secure: false,
-                auth: {
-                    user: "apikey",
-                    pass: process.env.SENDGRID_API_KEY,
-                },
-            };
-
-        case "mailgun":
-            return {
-                host: process.env.MAILGUN_SMTP_HOST || "smtp.mailgun.org",
-                port: 587,
-                secure: false,
-                auth: {
-                    user: process.env.MAILGUN_SMTP_USER,
-                    pass: process.env.MAILGUN_SMTP_PASS,
-                },
-            };
-
-        case "gmail":
-        default:
-            return {
-                host: process.env.SMTP_HOST || "smtp.gmail.com",
-                port: process.env.SMTP_PORT || 587,
-                secure: process.env.SMTP_SECURE === "true",
-                auth: {
-                    user: process.env.SMTP_USER,
-                    pass: process.env.SMTP_PASS,
-                },
-            };
-    }
-};
-
-// Send email via Resend HTTP API (more reliable than SMTP in cloud environments)
-const sendViaResend = async (emailData, strapi) => {
-    const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            from: process.env.RESEND_EMAIL_FROM,
-            to: [process.env.CONTACT_EMAIL],
-            reply_to: emailData.replyTo,
-            subject: emailData.subject,
-            html: emailData.html,
-            text: emailData.text,
-        }),
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Resend API error: ${JSON.stringify(errorData)}`);
-    }
-
-    return response.json();
-};
-
-// Send email via SMTP (for Gmail, SendGrid, Mailgun)
-const sendViaSMTP = async (emailData, strapi) => {
-    const transporter = nodemailer.createTransport(getProviderConfig());
-    const provider = (process.env.EMAIL_PROVIDER || "gmail").toLowerCase();
-    const fromEmail = process.env.EMAIL_FROM || process.env.SMTP_USER;
-
-    return transporter.sendMail({
-        from: fromEmail,
-        to: process.env.CONTACT_EMAIL,
-        replyTo: emailData.replyTo,
-        subject: emailData.subject,
-        html: emailData.html,
-        text: emailData.text,
-    });
-};
+const { sendEmail } = require("../../../utils/email");
 
 module.exports = createCoreController(
     "api::contact-submission.contact-submission",
@@ -140,6 +57,7 @@ module.exports = createCoreController(
 
             // Prepare email data
             const emailData = {
+                to: process.env.CONTACT_EMAIL,
                 replyTo: email,
                 subject: `New Contact Form Submission from ${fullName}`,
                 html: `
@@ -164,28 +82,16 @@ Message: ${message}
         `.trim(),
             };
 
-            // Send email notification (fire-and-forget, don't block response)
+            // Send email notification (fire-and-forget, don't block response).
+            // Provider selection (resend / gmail / sendgrid / mailgun) lives in src/utils/email.js.
             const provider = (process.env.EMAIL_PROVIDER || "gmail").toLowerCase();
-
-            if (provider === "resend") {
-                // Use Resend HTTP API (avoids SMTP port blocking on cloud platforms)
-                sendViaResend(emailData, strapi)
-                    .then(() => {
-                        strapi.log.info(`Contact form email sent via Resend API for submission from ${email}`);
-                    })
-                    .catch((err) => {
-                        strapi.log.error("Failed to send contact form email via Resend:", err);
-                    });
-            } else {
-                // Use SMTP for other providers
-                sendViaSMTP(emailData, strapi)
-                    .then(() => {
-                        strapi.log.info(`Contact form email sent via ${provider} SMTP for submission from ${email}`);
-                    })
-                    .catch((err) => {
-                        strapi.log.error("Failed to send contact form email via SMTP:", err);
-                    });
-            }
+            sendEmail(emailData)
+                .then(() => {
+                    strapi.log.info(`Contact form email sent via ${provider} for submission from ${email}`);
+                })
+                .catch((err) => {
+                    strapi.log.error(`Failed to send contact form email via ${provider}:`, err);
+                });
 
             return response;
         },
