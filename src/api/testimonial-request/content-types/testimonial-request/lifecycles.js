@@ -33,11 +33,12 @@ module.exports = {
             data.expiresAt = new Date(Date.now() + EXPIRY_DAYS * 864e5).toISOString();
         }
         if (!data.sentAt) data.sentAt = new Date().toISOString();
+        if (!data.shareUrl) data.shareUrl = `${SITE_URL}/share-your-story/${data.token}`;
     },
 
     async afterCreate(event) {
-        const { recipientName, recipientEmail, token } = event.result;
-        const link = `${SITE_URL}/share-your-story/${token}`;
+        const { recipientName, recipientEmail, token, shareUrl } = event.result;
+        const link = shareUrl || `${SITE_URL}/share-your-story/${token}`;
         const safeName = escapeHtml(recipientName);
 
         const subject = "Would you share your experience with She Rolls with Spirit?";

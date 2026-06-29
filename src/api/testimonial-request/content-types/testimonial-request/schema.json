@@ -24,6 +24,9 @@
       "type": "string",
       "unique": true
     },
+    "shareUrl": {
+      "type": "string"
+    },
     "requestStatus": {
       "type": "enumeration",
       "enum": ["pending", "completed", "expired"],
