@@ -30,27 +30,6 @@ const toBlocks = (text) =>
 const isUsable = (req) =>
     !!req && req.requestStatus === "pending" && new Date(req.expiresAt) > new Date();
 
-const verifyTurnstile = async (token) => {
-    if (process.env.NODE_ENV === "development" || !process.env.TURNSTILE_SECRET_KEY) {
-        return true;
-    }
-    if (!token) return false;
-
-    const res = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-                secret: process.env.TURNSTILE_SECRET_KEY,
-                response: token,
-            }),
-        }
-    );
-    const result = await res.json();
-    return result.success === true;
-};
-
 module.exports = createCoreController(UID, ({ strapi }) => ({
     // GET /api/testimonial-requests/validate/:token  ->  { valid, name }
     async validate(ctx) {
@@ -66,9 +45,9 @@ module.exports = createCoreController(UID, ({ strapi }) => ({
     },
 
     // POST /api/testimonial-requests/submit
-    // body.data: { token, name, location, title, quote, website, turnstileToken }
+    // body.data: { token, name, location, title, quote, website }
     async submit(ctx) {
-        const { token, name, location, title, quote, website, turnstileToken } =
+        const { token, name, location, title, quote, website } =
             ctx.request.body.data || {};
 
         // Honeypot — pretend success without doing anything.
@@ -79,11 +58,9 @@ module.exports = createCoreController(UID, ({ strapi }) => ({
             return { error: { message: "Please share a few words." } };
         }
 
-        if (!(await verifyTurnstile(turnstileToken))) {
-            ctx.status = 400;
-            return { error: { message: "Verification failed. Please try again." } };
-        }
-
+        // No Turnstile here: this endpoint is gated by a single-use, unguessable,
+        // owner-issued token (plus the honeypot above). A CAPTCHA on top only served to
+        // lock out real invited customers whose browsers block or expire Turnstile.
         const req = await strapi.documents(UID).findFirst({ filters: { token } });
         if (!isUsable(req)) {
             ctx.status = 410;
