@@ -28,7 +28,7 @@ const toBlocks = (text) =>
         }));
 
 const isUsable = (req) =>
-    !!req && req.status === "pending" && new Date(req.expiresAt) > new Date();
+    !!req && req.requestStatus === "pending" && new Date(req.expiresAt) > new Date();
 
 const verifyTurnstile = async (token) => {
     if (process.env.NODE_ENV === "development" || !process.env.TURNSTILE_SECRET_KEY) {
@@ -109,7 +109,7 @@ module.exports = createCoreController(UID, ({ strapi }) => ({
         await strapi.documents(UID).update({
             documentId: req.documentId,
             data: {
-                status: "completed",
+                requestStatus: "completed",
                 usedAt: new Date().toISOString(),
                 testimonial: { connect: [testimonial.documentId] },
             },

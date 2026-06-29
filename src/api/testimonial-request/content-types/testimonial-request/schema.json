@@ -24,7 +24,7 @@
       "type": "string",
       "unique": true
     },
-    "status": {
+    "requestStatus": {
       "type": "enumeration",
       "enum": ["pending", "completed", "expired"],
       "default": "pending"

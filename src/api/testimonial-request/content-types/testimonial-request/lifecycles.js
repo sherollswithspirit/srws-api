@@ -28,7 +28,7 @@ module.exports = {
     async beforeCreate(event) {
         const { data } = event.params;
         if (!data.token) data.token = crypto.randomBytes(32).toString("hex"); // 256-bit, unguessable
-        if (!data.status) data.status = "pending";
+        if (!data.requestStatus) data.requestStatus = "pending";
         if (!data.expiresAt) {
             data.expiresAt = new Date(Date.now() + EXPIRY_DAYS * 864e5).toISOString();
         }
