@@ -2,12 +2,19 @@
 
 module.exports = {
   /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
+   * Register phase (runs before the app is initialized).
    *
-   * This gives you an opportunity to extend code.
+   * Declares the `copyable-link` custom field: a plain string whose admin input
+   * renders the value plus a one-click copy-to-clipboard button. Used by
+   * `testimonial-request.shareUrl`. The matching admin component lives in
+   * src/admin/app.js; schemas reference it as `global::copyable-link`.
    */
-  register(/*{ strapi }*/) {},
+  register({ strapi }) {
+    strapi.customFields.register({
+      name: 'copyable-link',
+      type: 'string',
+    });
+  },
 
   /**
    * An asynchronous bootstrap function that runs before

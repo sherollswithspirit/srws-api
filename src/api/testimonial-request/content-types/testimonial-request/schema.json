@@ -25,7 +25,8 @@
       "unique": true
     },
     "shareUrl": {
-      "type": "string"
+      "type": "string",
+      "customField": "global::copyable-link"
     },
     "requestStatus": {
       "type": "enumeration",
