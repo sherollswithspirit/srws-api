@@ -474,6 +474,7 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     Description: Schema.Attribute.Blocks;
+    Facts: Schema.Attribute.Blocks;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::about.about'> &
       Schema.Attribute.Private;
@@ -637,9 +638,13 @@ export interface ApiTestimonialRequestTestimonialRequest
     publishedAt: Schema.Attribute.DateTime;
     recipientEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     recipientName: Schema.Attribute.String & Schema.Attribute.Required;
-    sentAt: Schema.Attribute.DateTime;
-    status: Schema.Attribute.Enumeration<['pending', 'completed', 'expired']> &
+    requestStatus: Schema.Attribute.Enumeration<
+      ['pending', 'completed', 'expired']
+    > &
       Schema.Attribute.DefaultTo<'pending'>;
+    sentAt: Schema.Attribute.DateTime;
+    shareUrl: Schema.Attribute.String &
+      Schema.Attribute.CustomField<'global::copyable-link'>;
     testimonial: Schema.Attribute.Relation<
       'oneToOne',
       'api::testimonial.testimonial'
