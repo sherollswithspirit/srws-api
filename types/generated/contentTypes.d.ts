@@ -581,6 +581,35 @@ export interface ApiContactSubmissionContactSubmission
   };
 }
 
+export interface ApiContactContact extends Struct.SingleTypeSchema {
+  collectionName: 'contacts';
+  info: {
+    displayName: 'Contact';
+    pluralName: 'contacts';
+    singularName: 'contact';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact.contact'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEnergyAndFrequencyEnergyAndFrequency
   extends Struct.CollectionTypeSchema {
   collectionName: 'energy_and_frequencies';
@@ -1322,6 +1351,7 @@ declare module '@strapi/strapi' {
       'api::booking.booking': ApiBookingBooking;
       'api::clair.clair': ApiClairClair;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
+      'api::contact.contact': ApiContactContact;
       'api::energy-and-frequency.energy-and-frequency': ApiEnergyAndFrequencyEnergyAndFrequency;
       'api::session-single.session-single': ApiSessionSingleSessionSingle;
       'api::testimonial-request.testimonial-request': ApiTestimonialRequestTestimonialRequest;
