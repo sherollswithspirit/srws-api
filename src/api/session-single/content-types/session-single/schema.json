@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "sessions_single",
+  "info": {
+    "singularName": "session-single",
+    "pluralName": "sessions-single",
+    "displayName": "Session"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "blocks"
+    }
+  }
+}

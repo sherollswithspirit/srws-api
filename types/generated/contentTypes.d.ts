@@ -612,6 +612,35 @@ export interface ApiEnergyAndFrequencyEnergyAndFrequency
   };
 }
 
+export interface ApiSessionSingleSessionSingle extends Struct.SingleTypeSchema {
+  collectionName: 'sessions_single';
+  info: {
+    displayName: 'Session';
+    pluralName: 'sessions-single';
+    singularName: 'session-single';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::session-single.session-single'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiTestimonialRequestTestimonialRequest
   extends Struct.CollectionTypeSchema {
   collectionName: 'testimonial_requests';
@@ -1294,6 +1323,7 @@ declare module '@strapi/strapi' {
       'api::clair.clair': ApiClairClair;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::energy-and-frequency.energy-and-frequency': ApiEnergyAndFrequencyEnergyAndFrequency;
+      'api::session-single.session-single': ApiSessionSingleSessionSingle;
       'api::testimonial-request.testimonial-request': ApiTestimonialRequestTestimonialRequest;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tool.tool': ApiToolTool;
